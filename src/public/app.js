@@ -1,41 +1,32 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import('dotenv');
+import 'dotenv/config';
 import {MONGO_URI, PORT} from '~/utilities/constants'
 import bodyParser from 'body-parser';
 import graphqlHTTP from 'express-graphql';
-import {buildSchema} from 'graphql';
+import {schema} from '~/graphql/schema/index';
 
 const app = express();
 app.use(bodyParser.json());
 
-// Construct a schema, using GraphQL schema language
-const schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);
-
-const root = {
-  hello: () => {
-    return 'hello world.';
-  }
-};
-
 app.use('/graphql', graphqlHTTP({
   schema: schema,
-  rootValue: root,
   graphiql: true,
 }));
 
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
-
-mongoose.connect(`${MONGO_URI}`, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
-
-app.listen(PORT);
-console.log(`Running on http://localhost:${PORT}`);
+//CONNECT TO DB
+try {
+  mongoose.connect(`${MONGO_URI}`,
+    {
+      useUnifiedTopology: true,
+      useNewUrlParser: true
+    },
+    () => {
+      console.log('connected to database');
+      app.listen(PORT);
+      console.log(`Running on http://localhost:${PORT}`);
+    }
+  );
+} catch (error) {
+  console.log(error);
+}
