@@ -23,6 +23,7 @@ try {
     },
     () => {
       console.log('connected to database');
+      console.log('Welcome to Express JS');
       app.listen(PORT);
       console.log(`Running on http://localhost:${PORT}`);
     }

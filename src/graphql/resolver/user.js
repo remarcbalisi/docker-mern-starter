@@ -1,10 +1,14 @@
 import User from '~/models/User';
+import bcrypt from 'bcryptjs';
 
 export const typeDef =  `
   type User {
     _id: ID!
     firstName: String!
+    lastName: String!
     email: String!
+    password: String!
+    createdAt: String!
   }
   
   extend type Query {
@@ -14,7 +18,9 @@ export const typeDef =  `
   
   input UserInput {
     firstName: String!
+    lastName: String!
     email: String!
+    password: String!
   }
   
   extend type Mutation {
@@ -32,10 +38,20 @@ export const resolvers = {
     }
   },
   Mutation: {
-    createUser: async (_, {userInput: {firstName, email}}) => {
+    createUser: async (_, {userInput: {firstName, lastName, email, password}}) => {
+
+      const userExist = await User.findOne({email: email});
+
+      if (userExist) {
+        throw new Error("Email already exist");
+      }
+
       const user = new User({
         firstName: firstName,
+        lastName: lastName,
         email: email,
+        password: await bcrypt.hash(password, 10),
+        createdAt: new Date().toISOString(),
       });
 
       try {
