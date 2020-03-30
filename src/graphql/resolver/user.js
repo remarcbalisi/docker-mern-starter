@@ -16,7 +16,7 @@ export const resolvers = {
       const userExist = await User.findOne({email: email});
 
       if (userExist) {
-        throw new Error("Email already exist");
+        throw new Error('Email already exist');
       }
 
       const user = new User({
