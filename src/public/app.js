@@ -1,17 +1,32 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import('dotenv');
-import { MONGO_URI, PORT } from '~/utilities/constants'
+import 'dotenv/config';
+import {MONGO_URI, PORT} from '~/utilities/constants'
+import bodyParser from 'body-parser';
+import graphqlHTTP from 'express-graphql';
+import {schema} from '~/graphql/schema/index';
 
 const app = express();
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
+app.use(bodyParser.json());
 
-mongoose.connect(`${MONGO_URI}`, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  graphiql: true,
+}));
 
-app.listen(PORT);
-console.log(`Running on http://localhost:${PORT}`);
+//CONNECT TO DB
+try {
+  mongoose.connect(`${MONGO_URI}`,
+    {
+      useUnifiedTopology: true,
+      useNewUrlParser: true
+    },
+    () => {
+      console.log('connected to database');
+      app.listen(PORT);
+      console.log(`Running on http://localhost:${PORT}`);
+    }
+  );
+} catch (error) {
+  console.log(error);
+}
