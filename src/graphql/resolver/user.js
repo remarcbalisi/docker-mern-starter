@@ -30,7 +30,7 @@ export const resolvers = {
       try {
         return await user.save();
       } catch (error) {
-        console.log(error)
+        throw new Error(error);
       }
     }
   }
