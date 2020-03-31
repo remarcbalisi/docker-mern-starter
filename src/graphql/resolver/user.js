@@ -11,21 +11,19 @@ export const resolvers = {
     }
   },
   Mutation: {
-    createUser: async (_, {userInput: {firstName, lastName, email, password}}, req) => {
+    createUser: async (_, {userInput}, req) => {
       if(!req.isAuth) {
         throw new Error('Unauthenticated');
       }
-      const userExist = await User.findOne({email: email});
+      const userExist = await User.findOne({email: userInput.email});
 
       if (userExist) {
         throw new Error('Email already exist');
       }
 
       const user = new User({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: await bcrypt.hash(password, 10),
+        ... userInput,
+        password: await bcrypt.hash(userInput.password, 12)
       });
 
       try {
