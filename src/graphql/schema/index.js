@@ -1,7 +1,7 @@
-import {
-  resolvers as UserResolver,
-} from '~/graphql/resolver/user';
+import {resolvers as UserResolver} from '~/graphql/resolver/user';
+import {resolvers as AuthResolver} from '~/graphql/resolver/auth';
 import {typeDef as User} from '~/graphql/schema/user';
+import {typeDef as Auth} from '~/graphql/schema/auth';
 import {makeExecutableSchema} from 'graphql-tools';
 import {merge} from 'lodash';
 
@@ -18,6 +18,6 @@ const Schema = `
 const Query = {};
 
 export const schema = makeExecutableSchema({
-  typeDefs: [Schema, User],
-  resolvers: merge(Query, UserResolver),
+  typeDefs: [Schema, User, Auth],
+  resolvers: merge(Query, UserResolver, AuthResolver),
 });
