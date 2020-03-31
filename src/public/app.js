@@ -16,20 +16,27 @@ app.use('/graphql', graphqlHTTP({
   graphiql: true,
 }));
 
-//CONNECT TO DB
-try {
-  mongoose.connect(`${MONGO_URI}`,
-    {
-      useUnifiedTopology: true,
-      useNewUrlParser: true
-    },
-    () => {
-      console.log('connected to database 🖥');
-      console.log('Welcome to Express JS 🥳🥳🥳');
-      app.listen(PORT);
-      console.log(`Running on http://localhost:${PORT}`);
-    }
-  );
-} catch (error) {
-  console.log(error);
-}
+const App = async () => {
+  //CONNECT TO DB
+  try {
+
+    await mongoose.connect(`${MONGO_URI}`,
+      {
+        useUnifiedTopology: true,
+        useNewUrlParser: true
+      }
+    );
+
+    console.log('connected to database 🖥');
+    console.log('Welcome to Express JS 🥳🥳🥳');
+
+    app.listen(PORT);
+    console.log(`Running on http://localhost:${PORT}`);
+
+  } catch (error) {
+    console.error(`Cannot connect to Database: ${error} \nReconnecting...`);
+    App();
+  }
+};
+
+App();

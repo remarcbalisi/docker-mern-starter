@@ -9,8 +9,7 @@ const User = new Schema({
   password: {
     type: String,
     select: false,
-  },
-  createdAt: String
-});
+  }
+}, {timestamps: true});
 
 export default mongoose.model('User', User);

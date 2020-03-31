@@ -26,7 +26,6 @@ export const resolvers = {
         lastName: lastName,
         email: email,
         password: await bcrypt.hash(password, 10),
-        createdAt: new Date().toISOString(),
       });
 
       try {
