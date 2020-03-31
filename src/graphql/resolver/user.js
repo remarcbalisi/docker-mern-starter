@@ -11,8 +11,10 @@ export const resolvers = {
     }
   },
   Mutation: {
-    createUser: async (_, {userInput: {firstName, lastName, email, password}}) => {
-
+    createUser: async (_, {userInput: {firstName, lastName, email, password}}, req) => {
+      if(!req.isAuth) {
+        throw new Error('Unauthenticated');
+      }
       const userExist = await User.findOne({email: email});
 
       if (userExist) {

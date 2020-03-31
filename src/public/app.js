@@ -5,9 +5,11 @@ import {MONGO_URI, PORT} from '~/utilities/constants'
 import bodyParser from 'body-parser';
 import graphqlHTTP from 'express-graphql';
 import {schema} from '~/graphql/schema/index';
+import Authentication from '~/middleware/Authentication';
 
 const app = express();
 app.use(bodyParser.json());
+app.use(Authentication);
 
 app.use('/graphql', graphqlHTTP({
   schema: schema,

@@ -1,6 +1,7 @@
 import User from '~/models/User';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import {SECRET_KEY} from '~/utilities/constants';
 
 export const resolvers = {
   Query: {
@@ -19,7 +20,7 @@ export const resolvers = {
 
       const token = await jwt.sign(
         {userId: user.id, email: user.email},
-        'supersecretkey',
+        SECRET_KEY,
         {
           expiresIn: '1h'
         }
