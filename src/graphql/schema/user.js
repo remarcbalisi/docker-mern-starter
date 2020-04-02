@@ -6,6 +6,7 @@ export const typeDef =  `
     email: String!
     password: String
     createdAt: String!
+    roles: [Role!]!
   }
   
   extend type Query {

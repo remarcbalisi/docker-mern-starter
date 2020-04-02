@@ -1,4 +1,5 @@
 import User from '~/models/User';
+import Role from '~/models/Role';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import {SECRET_KEY} from '~/utilities/constants';
@@ -42,6 +43,8 @@ const createUser = async (payload) => {
     ... payload,
     password: await bcrypt.hash(payload.password, 12)
   });
+
+  user.roles.push(await Role.findById('5e860553bb3b910033e04fca'))
 
   try {
     return await user.save();
