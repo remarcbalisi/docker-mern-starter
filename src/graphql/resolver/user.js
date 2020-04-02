@@ -1,5 +1,4 @@
 import User from '~/models/User';
-import bcrypt from 'bcryptjs';
 import {createUser} from '~/repositories/user';
 
 export const resolvers = {
