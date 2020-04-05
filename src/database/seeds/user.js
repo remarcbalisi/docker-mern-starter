@@ -2,7 +2,7 @@ import User from '~/models/User';
 import Role from '~/models/Role';
 import bcrypt from 'bcryptjs';
 
-const createAdminUserSeeder = async () => {
+const CreateAdminUserSeeder = async () => {
   console.log('creating user...');
 
   const newUser = await new User({
@@ -24,6 +24,4 @@ const createAdminUserSeeder = async () => {
   }
 };
 
-export {
-  createAdminUserSeeder,
-};
+export default CreateAdminUserSeeder;

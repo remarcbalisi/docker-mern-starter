@@ -1,4 +1,5 @@
-import {createAdminUserSeeder} from '~/database/seeds/user';
+import CreateAdminUserSeeder from '~/database/seeds/user';
+import CreateRoleSeeder from '~/database/seeds/role';
 import mongoose from 'mongoose';
 import {MONGO_URI} from '~/utilities/constants'
 
@@ -16,7 +17,8 @@ const dbSeed = async () => {
     );
 
     //seeders
-    await createAdminUserSeeder();
+    await CreateRoleSeeder();
+    await CreateAdminUserSeeder();
 
     console.log('closing connection');
     mongoose.connection.close()

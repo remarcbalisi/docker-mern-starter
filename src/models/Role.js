@@ -1,9 +1,4 @@
 import mongoose from 'mongoose';
+import RoleSchema from './mongooseSchema/RoleSchema';
 
-const Schema = mongoose.Schema;
-
-const Role = new Schema({
-  name: String,
-}, {timestamps: true});
-
-export default mongoose.model('Role', Role);
+export default mongoose.model('Role', RoleSchema);
