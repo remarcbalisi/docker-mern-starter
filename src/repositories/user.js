@@ -1,4 +1,5 @@
 import User from '~/models/User';
+import Role from '~/models/Role';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import {SECRET_KEY} from '~/utilities/constants';
@@ -31,16 +32,55 @@ const loginUser = async ({email, password}) => {
   }
 };
 
-const createUser = async (payload) => {
+const register = async (payload) => {
   const userExist = await User.findOne({email: payload.email});
 
   if (userExist) {
     throw new Error('Email already exist');
   }
 
+  const roleNames = payload.roles;
+  delete payload.roles;
   const user = new User({
     ... payload,
     password: await bcrypt.hash(payload.password, 12)
+  });
+
+  const roles = await Role.find({name: 'User'});
+
+  user.roles.push({
+    $each: roles
+  });
+
+  try {
+    return await user.save();
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const AdminCreateUser = async (payload) => {
+  const userExist = await User.findOne({email: payload.email});
+
+  if (userExist) {
+    throw new Error('Email already exist');
+  }
+
+  const roleNames = payload.roles;
+  delete payload.roles;
+  const user = new User({
+    ... payload,
+    password: await bcrypt.hash(payload.password, 12)
+  });
+
+  const roles = await Role.find({
+    'name': {
+      $in: roleNames
+    }
+  });
+
+  user.roles.push({
+    $each: roles
   });
 
   try {
@@ -52,5 +92,6 @@ const createUser = async (payload) => {
 
 export {
   loginUser,
-  createUser,
+  register,
+  AdminCreateUser,
 }

@@ -6,6 +6,7 @@ export const typeDef =  `
     email: String!
     password: String
     createdAt: String!
+    roles: [Role!]!
   }
   
   extend type Query {
@@ -20,7 +21,16 @@ export const typeDef =  `
     password: String!
   }
   
+  input AdminUserInput {
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+    roles: [String!]!
+  }
+  
   extend type Mutation {
-    createUser(userInput: UserInput!): User!
+    register(userInput: UserInput!): User!
+    adminCreateUser(adminUserInput: AdminUserInput!): User!
   }
 `;
