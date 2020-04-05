@@ -3,13 +3,14 @@ import Role from '~/models/Role';
 const CreateRoleSeeder = async () => {
   console.log('creating role..');
 
-  const adminRole = await new Role({
-    name: 'Admin'
-  });
+  const roles = [
+    {name: 'Admin'},
+    {name: 'User'},
+  ];
 
   try {
-    await adminRole.save();
-    console.log('role successfully added');
+    await Role.insertMany(roles);
+    console.log('roles successfully added');
   } catch (error) {
     console.log(error)
   }

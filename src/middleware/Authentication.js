@@ -5,6 +5,7 @@ import {removeNewLine, removeWhiteSpace} from '~/utilities/string';
 import {find} from 'lodash';
 import {hasRole} from '~/repositories/role';
 import ProtectedResolvers from './ProtectedResolvers';
+import User from '~/models/User';
 
 const isAuthorized = async (userId, resolverName) => {
   const protectedResolver = find(ProtectedResolvers, {name: resolverName});
@@ -14,7 +15,7 @@ const isAuthorized = async (userId, resolverName) => {
   return true;
 };
 
-const Authenticated = (req) => {
+const Authenticated = async (req, res) => {
 
   const authHeader = req.get('Authorization');
 
@@ -43,6 +44,11 @@ const Authenticated = (req) => {
     return req
   }
 
+  //validate if userId still exist in database
+  if (! await User.findById(decodedToken.userId)) {
+    res.status(403).end('Unauthenticated');
+  }
+
   req.isAuth = true;
   req.userId = decodedToken.userId;
   return req;
@@ -56,7 +62,8 @@ const Authentication = async (req, res, next) => {
                         .match(/{([a-zA-Z]*)/gm)[0]
                         .replace('{', '');
 
-  req = Authenticated(req, res, resolverName);
+  req = await Authenticated(req, res);
+
   const protectedResolver = find(ProtectedResolvers, {name: resolverName});
 
   if (protectedResolver) {
