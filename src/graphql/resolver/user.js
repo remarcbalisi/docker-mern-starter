@@ -1,5 +1,5 @@
 import User from '~/models/User';
-import {createUser} from '~/repositories/user';
+import {register, AdminCreateUser} from '~/repositories/user';
 
 export const resolvers = {
   Query: {
@@ -11,11 +11,11 @@ export const resolvers = {
     }
   },
   Mutation: {
-    createUser: async (_, {userInput}, req) => {
-      if(!req.isAuth) {
-        throw new Error('Unauthenticated');
-      }
-      return await createUser(userInput);
+    register: async (_, {userInput}, req) => {
+      return await register(userInput);
+    },
+    adminCreateUser: async (_, {adminUserInput}, req) => {
+      return await AdminCreateUser(adminUserInput);
     }
   }
 };

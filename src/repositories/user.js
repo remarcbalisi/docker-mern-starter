@@ -32,19 +32,56 @@ const loginUser = async ({email, password}) => {
   }
 };
 
-const createUser = async (payload) => {
+const register = async (payload) => {
   const userExist = await User.findOne({email: payload.email});
 
   if (userExist) {
     throw new Error('Email already exist');
   }
 
+  const roleNames = payload.roles;
+  delete payload.roles;
   const user = new User({
     ... payload,
     password: await bcrypt.hash(payload.password, 12)
   });
 
-  user.roles.push(await Role.findById('5e860553bb3b910033e04fca'))
+  const roles = await Role.find({name: 'User'});
+
+  user.roles.push({
+    $each: roles
+  });
+
+  try {
+    return await user.save();
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const AdminCreateUser = async (payload) => {
+  const userExist = await User.findOne({email: payload.email});
+
+  if (userExist) {
+    throw new Error('Email already exist');
+  }
+
+  const roleNames = payload.roles;
+  delete payload.roles;
+  const user = new User({
+    ... payload,
+    password: await bcrypt.hash(payload.password, 12)
+  });
+
+  const roles = await Role.find({
+    'name': {
+      $in: roleNames
+    }
+  });
+
+  user.roles.push({
+    $each: roles
+  });
 
   try {
     return await user.save();
@@ -55,5 +92,6 @@ const createUser = async (payload) => {
 
 export {
   loginUser,
-  createUser,
+  register,
+  AdminCreateUser,
 }

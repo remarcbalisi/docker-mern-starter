@@ -1,6 +1,16 @@
 const ProtectedResolvers = [
   {
-    name: 'createUser',
+    name: 'adminCreateUser',
+    allowedMiddleware: [
+      'auth',
+      'role'
+    ],
+    allowedRoles: [
+      'Admin'
+    ]
+  },
+  {
+    name: 'createRole',
     allowedMiddleware: [
       'auth',
       'role'
