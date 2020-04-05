@@ -1,4 +1,5 @@
 import {resolvers as UserResolver} from '~/graphql/resolver/user';
+import {resolvers as AdminUserResolver} from '~/graphql/resolver/admin/user';
 import {resolvers as AuthResolver} from '~/graphql/resolver/auth';
 import {resolvers as RoleResolver} from '~/graphql/resolver/role';
 import {typeDef as User} from '~/graphql/schema/user';
@@ -20,6 +21,16 @@ const Schema = `
 const Query = {};
 
 export const schema = makeExecutableSchema({
-  typeDefs: [Schema, User, Auth, Role],
-  resolvers: merge(Query, UserResolver, AuthResolver, RoleResolver),
+  typeDefs: [
+    Schema,
+    User,
+    Auth,
+    Role
+  ],
+  resolvers: merge(
+    Query, UserResolver,
+    AdminUserResolver,
+    AuthResolver,
+    RoleResolver
+  ),
 });

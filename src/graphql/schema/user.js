@@ -21,6 +21,12 @@ export const typeDef =  `
     password: String!
   }
   
+  input UpdateUserInput {
+    firstName: String
+    lastName: String
+    email: String
+  }
+  
   input AdminUserInput {
     firstName: String!
     lastName: String!
@@ -31,6 +37,7 @@ export const typeDef =  `
   
   extend type Mutation {
     register(userInput: UserInput!): User!
+    updateUser(updateUserInput: UpdateUserInput!): User!
     adminCreateUser(adminUserInput: AdminUserInput!): User!
   }
 `;

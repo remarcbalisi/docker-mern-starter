@@ -59,6 +59,18 @@ const register = async (payload) => {
   }
 };
 
+const UpdateUser = async payload => {
+  const userId = payload.userId;
+  delete payload.userId;
+  try {
+    return await User.findOneAndUpdate({_id: userId}, payload, {
+      new: true
+    }).populate('roles');
+  } catch (error) {
+    throw new Error(error)
+  }
+};
+
 const AdminCreateUser = async (payload) => {
   const userExist = await User.findOne({email: payload.email});
 
@@ -93,5 +105,6 @@ const AdminCreateUser = async (payload) => {
 export {
   loginUser,
   register,
+  UpdateUser,
   AdminCreateUser,
 }

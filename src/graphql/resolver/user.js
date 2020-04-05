@@ -1,5 +1,5 @@
 import User from '~/models/User';
-import {register, AdminCreateUser} from '~/repositories/user';
+import {Register, UpdateUser} from '~/repositories/user';
 
 export const resolvers = {
   Query: {
@@ -12,10 +12,11 @@ export const resolvers = {
   },
   Mutation: {
     register: async (_, {userInput}, req) => {
-      return await register(userInput);
+      return await Register(userInput);
     },
-    adminCreateUser: async (_, {adminUserInput}, req) => {
-      return await AdminCreateUser(adminUserInput);
-    }
+    updateUser: async (_, {updateUserInput}, req) => {
+      updateUserInput['userId'] = req.userId;
+      return await UpdateUser(updateUserInput)
+    },
   }
 };
